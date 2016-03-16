@@ -3,6 +3,7 @@
 .project
 .springBeans
 .idea/
+.recommenders
 *.iml
 target/
 .metadata
