@@ -2,6 +2,7 @@ package com.spring.netflix.oss.microservices.api;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import javax.annotation.PostConstruct;
 
@@ -39,12 +40,16 @@ public class CardServiceController {
 	
 	@RequestMapping(value="/card/{cardId}", method = RequestMethod.GET)
 	public Card getCard(@PathVariable Long cardId) {
-		return 
-			(Card) fakeRepo
-			.stream()
-			.filter(
-					c -> c.getId().equals(cardId)
-			);
+		return Optional.ofNullable(
+				fakeRepo
+				.stream()
+				.filter((card) -> card.getId().equals(cardId))
+                .reduce(null, (u, v) -> {
+                    if (u != null && v != null)
+                        throw new IllegalStateException("More than one CardId found");
+                    else return u == null ? v : u;
+                })).get();
+		
 	}
 
 	@RequestMapping(path = "/new-card", method = RequestMethod.POST)
