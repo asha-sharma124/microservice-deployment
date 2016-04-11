@@ -3,6 +3,7 @@ package com.spring.netflix.oss.microservices.api;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import javax.annotation.PostConstruct;
 
@@ -44,18 +45,6 @@ public class StatementServiceController {
 	
 	@RequestMapping(value="/statement/{statementId}", method = RequestMethod.GET)
 	public Statement getStatament(@PathVariable Long statementId, @RequestParam (required=false) Long cardId) {
-		if(cardId!=null){
-			return Optional.ofNullable(
-					fakeRepo
-					.stream()
-					.filter((statement) -> statement.getId().equals(statementId) && statement.getCardId().equals(cardId))
-	                .reduce(null, (u, v) -> {
-	                    if (u != null && v != null)
-	                        throw new IllegalStateException("More than one StatementId found");
-	                    else return u == null ? v : u;
-	                })).get();
-		}
-		
 		return Optional.ofNullable(
 				fakeRepo
 				.stream()
@@ -66,6 +55,17 @@ public class StatementServiceController {
                     else return u == null ? v : u;
                 })).get();
 		
+	}
+	
+	@RequestMapping(value="/statement", method = RequestMethod.GET)
+	public List<Statement> getStatements(@RequestParam Long cardId){
+		if(cardId!=null){
+			return fakeRepo
+					.stream()
+					.filter((statement) -> statement.getCardId().equals(cardId))
+					.collect(Collectors.toList());
+		}
+		return null;
 	}
 
 	@RequestMapping(value = "/new-statement", method = RequestMethod.POST)
