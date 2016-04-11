@@ -52,7 +52,7 @@ public class CardServiceController {
 		
 	}
 
-	@RequestMapping(path = "/new-card", method = RequestMethod.POST)
+	@RequestMapping(value = "/new-card", method = RequestMethod.POST)
 	public void createCard(@RequestBody Card newCard) {
 		fakeRepo.add(newCard);
 		System.out.println("New card passing: " + newCard);
