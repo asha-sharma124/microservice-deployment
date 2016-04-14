@@ -8,7 +8,6 @@ import java.util.stream.Collectors;
 import javax.annotation.PostConstruct;
 
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -44,7 +43,7 @@ public class StatementServiceController {
 	}
 	
 	@RequestMapping(value="/statement/{statementId}", method = RequestMethod.GET)
-	public Statement getStatament(@PathVariable Long statementId, @RequestParam (required=false) Long cardId) {
+	public Statement getStatament(@PathVariable Long statementId) {
 		return Optional.ofNullable(
 				fakeRepo
 				.stream()
@@ -68,10 +67,4 @@ public class StatementServiceController {
 		return null;
 	}
 
-	@RequestMapping(value = "/new-statement", method = RequestMethod.POST)
-	public void createStatement(@RequestBody Statement newStatement) {
-		fakeRepo.add(newStatement);
-		System.out.println("New Statement passing: " + newStatement);
-	}
-	
 }
