@@ -22,14 +22,16 @@ public class CardStatementServiceController {
 	@Autowired
 	CardClient cardClient;
 	
-	@Autowired
-	StatementClient statementClient;
+	//@Autowired
+	//StatementClient statementClient;
 	
 	@RequestMapping(value="/statement-by-card", method=RequestMethod.GET)
-	public ResponseEntity<Map<CardVO, List<StatementVO>>> getStatementByCardId(@RequestParam Long cardId){
+	public CardVO//ResponseEntity<Map<CardVO, List<StatementVO>>> 
+	getStatementByCardId(@RequestParam Long cardId){
 		Map<CardVO, List<StatementVO>> response = new HashMap<>();
-		response.put(cardClient.getCard(cardId), statementClient.getStatementsByCardId(cardId));
+		return cardClient.getCard(cardId);
+		//response.put(cardClient.getCard(cardId), statementClient.getStatements(cardId));
 		
-		return new ResponseEntity<Map<CardVO,List<StatementVO>>>(response, HttpStatus.OK);
+		//return new ResponseEntity<Map<CardVO,List<StatementVO>>>(response, HttpStatus.OK);
 	}
 }

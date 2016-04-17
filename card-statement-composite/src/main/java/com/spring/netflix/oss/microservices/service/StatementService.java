@@ -17,10 +17,10 @@ final static String PREFIX = "statement-service/api/";
 	@RequestMapping(value = PREFIX + "statements", method = GET)
 	List<StatementVO> getStatements();
 	
-	@RequestMapping(value = PREFIX + "/statement/{statementId}", method = GET)
+	@RequestMapping(value = PREFIX + "statement/{statementId}", method = GET)
 	StatementVO getStatament(@PathVariable Long statementId);
 	
-	@RequestMapping(value= PREFIX + "/statement", method = GET)
-	List<StatementVO> getStatementsByCardId(@RequestParam Long cardId);
+	@RequestMapping(value= PREFIX + "statement", method = GET)
+	List<StatementVO> getStatements(@RequestParam("cardId") Long cardId);
 
 }
