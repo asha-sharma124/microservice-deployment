@@ -8,6 +8,7 @@ public class StatementVO {
 	private Long cardId;
 	private String operationDate;
 	private String value;
+	
 	public Long getId() {
 		return id;
 	}
@@ -25,6 +26,13 @@ public class StatementVO {
 	}
 	public void setOperationDate(String operationDate) {
 		this.operationDate = operationDate;
+	}
+	
+	public String getValue() {
+		return value;
+	}
+	public void setValue(String value) {
+		this.value = value;
 	}
 	@Override
 	public String toString() {

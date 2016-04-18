@@ -12,13 +12,13 @@ import com.spring.netflix.oss.microservices.model.StatementVO;
 
 public interface StatementService {
 	
-final static String PREFIX = "statement-service/api/";
+final static String PREFIX = "api/";
 	
 	@RequestMapping(value = PREFIX + "statements", method = GET)
 	List<StatementVO> getStatements();
 	
 	@RequestMapping(value = PREFIX + "statement/{statementId}", method = GET)
-	StatementVO getStatament(@PathVariable Long statementId);
+	StatementVO getStatament(@PathVariable("statementId") Long statementId);
 	
 	@RequestMapping(value= PREFIX + "statement", method = GET)
 	List<StatementVO> getStatements(@RequestParam("cardId") Long cardId);
