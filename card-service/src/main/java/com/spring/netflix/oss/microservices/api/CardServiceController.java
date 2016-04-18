@@ -52,9 +52,11 @@ public class CardServiceController {
 		
 	}
 
-	@RequestMapping(value = "/new-card", method = RequestMethod.POST)
+	@RequestMapping(value = "/new-card", method = RequestMethod.POST, headers = "Accept=application/json")
 	public void createCard(@RequestBody Card newCard) {
-		fakeRepo.add(newCard);
+		if(newCard.getId()!=null){
+			fakeRepo.add(newCard);
+		}
 		System.out.println("New card passing: " + newCard);
 	}
 }
