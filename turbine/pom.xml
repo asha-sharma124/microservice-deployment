@@ -34,7 +34,8 @@
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.cloud</groupId>
-			<artifactId>spring-cloud-starter-turbine</artifactId>
+			<artifactId>spring-cloud-netflix-turbine-amqp</artifactId>
+			<version>1.0.7.RELEASE</version>
 		</dependency>
 		
 		<dependency>
