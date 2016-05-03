@@ -38,7 +38,7 @@ public class CardStatementServiceController {
 	}
 	
 	public ResponseEntity<Map<CardVO, List<StatementVO>>> 
-	defaultCardStatementError(){
+	defaultCardStatementError(Long cardId){
 		Map<CardVO, List<StatementVO>> response = new HashMap<>();
 		return new ResponseEntity<Map<CardVO,List<StatementVO>>>(response, HttpStatus.OK);
 		
