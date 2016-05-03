@@ -25,6 +25,12 @@
 
 	<dependencies>
 		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-undertow</artifactId>
+			<version>1.3.3.RELEASE</version>
+		</dependency>
+				
+		<dependency>
 			<groupId>org.springframework.cloud</groupId>
 			<artifactId>spring-cloud-netflix-turbine-amqp</artifactId>
 			<version>1.0.7.RELEASE</version>
