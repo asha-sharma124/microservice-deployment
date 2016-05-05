@@ -3,4 +3,4 @@ spring:
     name: turbine
   cloud:
     config:
-      uri: ${vcap.services.${PREFIX:}configserver.credentials.uri:http://user:password@localhost:9090}
+      uri: http://localhost:9090
