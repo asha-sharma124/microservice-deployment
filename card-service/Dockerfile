@@ -1,4 +1,4 @@
-FROM java:8-jre-alpine
+FROM java:8-jre
 VOLUME /tmp
 ENV environment=docker
 ADD target/*.jar app.jar
