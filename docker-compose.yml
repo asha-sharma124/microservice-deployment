@@ -63,6 +63,13 @@ card-statement:
    - card
    - statement
 
+rabbitmq:
+  build: rabbit-mq-server
+  ports:
+   - "5672:5672"
+  expose:
+   - "5672"
+
 monitor:
   build: monitor-dashboard
   environment:
