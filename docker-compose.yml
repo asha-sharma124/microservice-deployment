@@ -81,6 +81,7 @@ monitor:
   links:
    - config-server  
    - discovery-service
+   - rabbitmq
  
 turbine:
   build: turbine
@@ -93,3 +94,4 @@ turbine:
   links:
    - config-server  
    - discovery-service
+   - rabbitmq
