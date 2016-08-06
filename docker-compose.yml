@@ -67,8 +67,10 @@ rabbitmq:
   build: rabbit-mq-server
   ports:
    - "5672:5672"
+   - "15672:15672"
   expose:
    - "5672"
+   - "15672"
 
 monitor:
   build: monitor-dashboard
