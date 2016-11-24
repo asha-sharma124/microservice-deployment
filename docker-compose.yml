@@ -19,6 +19,8 @@ services:
      - "8761"
     depends_on:
      - config-server
+    links:
+     - config-server
 
   edge-server:
     build: edge-server
@@ -32,6 +34,7 @@ services:
      - discovery-service
     links:
      - config-server
+     - discovery-service
       
   card:
     build: card-service
@@ -43,7 +46,8 @@ services:
      - discovery-service
     links:
      - config-server
-     
+     - discovery-service
+
   statement:
     build: statement-service
     environment:
@@ -54,6 +58,7 @@ services:
      - discovery-service
     links:
      - config-server
+     - discovery-service
 
   card-statement:
     build: card-statement-composite
@@ -67,6 +72,9 @@ services:
      - statement
     links:
      - config-server
+     - discovery-service
+     - card
+     - statement
 
   rabbitmq:
     build: rabbit-mq-server
@@ -90,7 +98,9 @@ services:
      - rabbitmq
     links:
      - config-server
-   
+     - discovery-service
+     - rabbitmq
+
   turbine:
     build: turbine
     environment:
@@ -104,3 +114,5 @@ services:
      - rabbitmq
     links:
      - config-server
+     - discovery-service
+     - rabbitmq
