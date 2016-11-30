@@ -19,6 +19,7 @@ services:
      - "8761"
     depends_on:
      - config-server
+    entrypoint: ./wait-for-it config-server:9090
     links:
      - config-server
 
