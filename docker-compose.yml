@@ -1,4 +1,4 @@
-version: '2'
+version: '3.3'
 services:
   config-server:
     build: config-server
@@ -117,3 +117,9 @@ services:
      - config-server
      - discovery-service
      - rabbitmq
+  networks:
+    front-tier:
+      driver: bridge
+    back-tier:
+      driver: bridge
+      internal: true
