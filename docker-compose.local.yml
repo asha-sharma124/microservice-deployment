@@ -1,4 +1,4 @@
-version: '2'
+version: '3.3'
 services:
   config-server:
     ports:
@@ -36,4 +36,9 @@ services:
   turbine:
     ports:
      - "8989:8989"
-     
+  networks:
+    front-tier:
+      driver: bridge
+    back-tier:
+      driver: bridge
+      internal: true
