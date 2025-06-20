@@ -1,4 +1,5 @@
-FROM java:8-jre
+FROM openjdk:8-jre-slim
+
 VOLUME /tmp
 ENV environment=docker
 ADD target/*.jar app.jar

@@ -19,7 +19,8 @@ services:
      - "8761"
     depends_on:
      - config-server
-    entrypoint: ./wait-for-it.sh config-server:9090
+    entrypoint: ./wait-for-it.sh config-server:9090 -t 60 -- java $JAVA_OPTS -Djava.security.egd=file:/dev/./urandom -Dspring.profiles.active=docker -jar /app.jar
+
     links:
      - config-server
 
@@ -117,7 +118,7 @@ services:
      - config-server
      - discovery-service
      - rabbitmq
-  networks:
+networks:
     front-tier:
       driver: bridge
     back-tier:
