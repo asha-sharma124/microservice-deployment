@@ -90,8 +90,8 @@ EOF
                 sh """
                     ssh -T -o StrictHostKeyChecking=no -i ${SSH_KEY} ${USER}@${EC2_IP} << 'EOF'
 cd ${DOCKER_APP_PATH}
-docker-compose build
-docker-compose up -d
+docker compose build
+docker compose up -d
 EOF
                 """
             }
