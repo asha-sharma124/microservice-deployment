@@ -2,9 +2,9 @@ pipeline{
     agent any 
      environment {
         EC2_IP = credentials('ec2-IP')
-        SSH_KEY = credentials('ssh-key') // Jenkins credentials me save kiya hua
+        SSH_KEY = credentials('ssh-key2') // Jenkins credentials me save kiya hua
         DOCKER_APP_PATH = credentials('dir')
-        USER=credentials('ec2-user')
+        USER=credentials('ec2-user2')
     }
     stages{
         stage('build'){
