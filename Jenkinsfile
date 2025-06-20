@@ -45,14 +45,14 @@
 //         }
 
 
-pipeline {
+        pipeline {
     agent any
 
     environment {
         EC2_IP = credentials('ec2-IP')
-        SSH_KEY = credentials('ssh-key2')     // Private key stored in Jenkins credentials
-        DOCKER_APP_PATH = credentials('dir')  // Path like /home/ec2-user/spring-microservices
-        USER = credentials('ec2-user')        // usually 'ec2-user' or 'ubuntu'
+        SSH_KEY = credentials('ssh-key2')
+        DOCKER_APP_PATH = credentials('dir')
+        USER = credentials('ec2-user')
     }
 
     stages {
@@ -61,7 +61,7 @@ pipeline {
                 echo "Sending code to EC2..."
                 sh """
                     chmod 600 ${SSH_KEY}
-                    rsync -avz -e "ssh -i ${SSH_KEY}" ./ ${USER}@${EC2_IP}:${DOCKER_APP_PATH}
+                    rsync -avz -e "ssh -o StrictHostKeyChecking=no -i ${SSH_KEY}" ./ ${USER}@${EC2_IP}:${DOCKER_APP_PATH}
                 """
             }
         }
@@ -70,7 +70,7 @@ pipeline {
             steps {
                 echo "Running Maven build remotely..."
                 sh """
-                    ssh -i ${SSH_KEY} ${USER}@${EC2_IP} << EOF
+                    ssh -o StrictHostKeyChecking=no -i ${SSH_KEY} ${USER}@${EC2_IP} << EOF
                         cd ${DOCKER_APP_PATH}
                         for svc in config-server discovery-service card-service card-statement-composite edge-server monitor-dashboard statement-service turbine; do
                             echo "Building \$svc"
@@ -87,7 +87,7 @@ pipeline {
             steps {
                 echo "Building Docker images remotely..."
                 sh """
-                    ssh -i ${SSH_KEY} ${USER}@${EC2_IP} << EOF
+                    ssh -o StrictHostKeyChecking=no -i ${SSH_KEY} ${USER}@${EC2_IP} << EOF
                         cd ${DOCKER_APP_PATH}
                         docker-compose build
                         docker-compose up -d
@@ -97,6 +97,7 @@ pipeline {
         }
     }
 }
+
 
 
 
