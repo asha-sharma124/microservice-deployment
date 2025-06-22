@@ -48,38 +48,37 @@
      pipeline {
     agent any
 
-    environment {
-        EC2_IP = credentials('ec2-IP')                 // EC2 Public IP (Jenkins credentials)
-        SSH_KEY = credentials('ssh-key2')              // EC2 private key stored in Jenkins credentials
-        DOCKER_APP_PATH = credentials('dir')           // Directory on EC2 (e.g., /home/ec2-user/spring-microservices)
-        USER = credentials('ec2-user')                 // Typically ec2-user or ubuntu
-    }
+    // environment {
+    //     EC2_IP = credentials('ec2-IP')                 // EC2 Public IP (Jenkins credentials)
+    //     SSH_KEY = credentials('ssh-key2')              // EC2 private key stored in Jenkins credentials
+    //     DOCKER_APP_PATH = credentials('dir')           // Directory on EC2 (e.g., /home/ec2-user/spring-microservices)
+    //     USER = credentials('ec2-user')                 // Typically ec2-user or ubuntu
+    // }
 
     stages {
 
-        stage('Copy Code to EC2') {
-            steps {
-                echo "🔄 Sending code to EC2..."
-                sh """
-                    chmod 600 ${SSH_KEY}
-                    rsync -avz -e "ssh -o StrictHostKeyChecking=no -i ${SSH_KEY}" ./ ${USER}@${EC2_IP}:${DOCKER_APP_PATH}
-                """
-            }
-        }
+        // stage('Copy Code to EC2') {
+        //     steps {
+        //         echo "🔄 Sending code to EC2..."
+        //         sh """
+        //             chmod 600 ${SSH_KEY}
+        //             rsync -avz -e "ssh -o StrictHostKeyChecking=no -i ${SSH_KEY}" ./ ${USER}@${EC2_IP}:${DOCKER_APP_PATH}
+        //         """
+        //     }
+        // }
 
         stage('Build Project with Maven on EC2') {
             steps {
                 echo "⚙️ Building project on EC2..."
                 sh """
-                    ssh -T -o StrictHostKeyChecking=no -i ${SSH_KEY} ${USER}@${EC2_IP} << 'EOF'
-cd ${DOCKER_APP_PATH}
-for svc in config-server discovery-service card-service card-statement-composite edge-server monitor-dashboard statement-service turbine; do
-    echo "🚧 Building \$svc"
-    cd \$svc
-    mvn clean package -DskipTests
-    cd ..
-done
-EOF
+
+                  for svc in config-server discovery-service card-service card-statement-composite edge-server monitor-dashboard statement-service turbine; do
+                      echo "🚧 Building \$svc"
+                      cd \$svc
+                      mvn clean package -DskipTests
+                      cd ..
+                  done
+
                 """
             }
         }
@@ -88,11 +87,10 @@ EOF
             steps {
                 echo "🐳 Building Docker images and running containers..."
                 sh """
-                    ssh -T -o StrictHostKeyChecking=no -i ${SSH_KEY} ${USER}@${EC2_IP} << 'EOF'
-cd ${DOCKER_APP_PATH}
+                   
 sudo docker compose build
 sudo docker compose up -d
-EOF
+
                 """
             }
         }
