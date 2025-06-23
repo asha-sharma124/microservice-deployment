@@ -45,8 +45,8 @@
 //         }
 
 
-     pipeline {
-    agent any
+    //  pipeline {
+    // agent any
 
     // environment {
     //     EC2_IP = credentials('ec2-IP')                 // EC2 Public IP (Jenkins credentials)
@@ -55,7 +55,12 @@
     //     USER = credentials('ec2-user')                 // Typically ec2-user or ubuntu
     // }
 
-    stages {
+    // stages {
+    //    stage('Checkout Code') {
+    //         steps {
+    //             checkout scm
+    //         }
+    //     }
 
         // stage('Copy Code to EC2') {
         //     steps {
@@ -66,33 +71,91 @@
         //         """
         //     }
         // }
+pipeline {
+  agent any
 
-        stage('Build Project with Maven on EC2') {
-            steps {
-                echo "⚙️ Building project on EC2..."
-                sh """
+  environment {
+    DOCKERHUB_USERNAME = credentials('docker-user')
+    DOCKERHUB_PASSWORD = credentials('docker-pass')
+  }
 
-                  for svc in config-server discovery-service card-service card-statement-composite edge-server monitor-dashboard statement-service turbine; do
-                      echo "🚧 Building \$svc"
-                      cd \$svc
-                      mvn clean package -DskipTests
-                      cd ..
-                  done
-
-                """
-            }
-        }
-
-        stage('Build & Run Docker on EC2') {
-            steps {
-                echo "🐳 Building Docker images and running containers..."
-                sh """
-                   
-sudo docker compose build
-sudo docker compose up -d
-
-                """
-            }
-        }
+  stages {
+    stage('Checkout Code') {
+      steps {
+        checkout scm
+      }
     }
+
+    stage('Build All Services with Maven') {
+      steps {
+        echo "⚙️ Building all microservices..."
+        sh '''
+          for svc in config-server discovery-service card-service card-statement-composite edge-server monitor-dashboard statement-service turbine; do
+            echo "🚧 Building $svc"
+            cd $svc
+            mvn clean package -DskipTests
+            cd ..
+          done
+        '''
+      }
+    }
+
+    stage('Login to DockerHub') {
+      steps {
+        sh '''
+          echo $DOCKERHUB_PASSWORD | docker login -u $DOCKERHUB_USERNAME --password-stdin
+        '''
+      }
+    }
+
+    stage('Generate Image Tag') {
+      steps {
+        script {
+          def tag = new Date().format("yyyyMMdd-HHmmss")
+          env.IMAGE_TAG = tag
+        }
+      }
+    }
+
+    stage('Build & Push Docker Images') {
+      steps {
+        sh '''
+          for svc in config-server discovery-service card-service card-statement-composite edge-server monitor-dashboard statement-service turbine; do
+            echo "🐳 Building image for $svc"
+            docker build -t $DOCKERHUB_USERNAME/$svc:$IMAGE_TAG ./$svc
+            docker push $DOCKERHUB_USERNAME/$svc:$IMAGE_TAG
+          done
+        '''
+      }
+    }
+
+    stage('Update docker-compose.yml') {
+      steps {
+        sh '''
+          for svc in config-server discovery-service card-service card-statement-composite edge-server monitor-dashboard statement-service turbine; do
+            echo "🔧 Updating image tag for $svc in docker-compose.yml"
+            sed -i "s|image: $DOCKERHUB_USERNAME/$svc:.*|image: $DOCKERHUB_USERNAME/$svc:$IMAGE_TAG|" docker-compose.yml
+          done
+        '''
+      }
+    }
+
+    stage('Pull & Start All Services') {
+      steps {
+        sh '''
+          docker-compose pull
+          docker-compose up -d
+        '''
+      }
+    }
+  }
+
+  post {
+    success {
+      echo "✅ All services deployed with tag: $IMAGE_TAG"
+    }
+    failure {
+      echo "❌ Deployment failed."
+    }
+  }
 }
