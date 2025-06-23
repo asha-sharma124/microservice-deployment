@@ -86,23 +86,26 @@ pipeline {
       }
     }
 
-    stage('Build All Services with Maven') {
-      steps {
-        echo "⚙️ Building all microservices..."
-        script {
-          docker.image('maven:3.9.6-eclipse-temurin-17').inside {
-            sh '''
-              for svc in config-server discovery-service card-service card-statement-composite edge-server monitor-dashboard statement-service turbine; do
-                echo "🚧 Building $svc"
-                cd $svc
-                mvn clean package -DskipTests
-                cd ..
-              done
-            '''
-          }
-        }
+   stage('Build All Services with Maven') {
+  steps {
+    echo "⚙️ Building all microservices..."
+    script {
+      def image = docker.image('maven:3.9.6-eclipse-temurin-17')
+      image.pull() // Optional, ensures latest
+      image.inside {
+        sh '''
+          for svc in config-server discovery-service card-service card-statement-composite edge-server monitor-dashboard statement-service turbine; do
+            echo "🚧 Building $svc"
+            cd $svc
+            mvn clean package -DskipTests
+            cd ..
+          done
+        '''
       }
     }
+  }
+}
+
 
     stage('Login to DockerHub') {
       steps {
