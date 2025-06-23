@@ -73,7 +73,9 @@
         // }
 pipeline {
   agent any
-
+  tools {
+    maven 'Maven 3.9'   // 👈 This must match the name from above
+  }
   environment {
     DOCKERHUB_USERNAME = credentials('docker-user')
     DOCKERHUB_PASSWORD = credentials('docker-pass')
@@ -88,9 +90,7 @@ pipeline {
 
     stage('Build All Services with Maven') {
       steps {
-        echo "⚙️ Building all microservices..."
-        script {
-          docker.image('maven:3.9.6-eclipse-temurin-17').inside {
+       
             sh '''
               mvn -v  # 👈 Verify Maven inside the container
 
@@ -101,8 +101,8 @@ pipeline {
                 cd ..
               done
             '''
-          }
-        }
+          
+        
       }
     }
 
