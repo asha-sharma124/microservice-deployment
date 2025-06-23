@@ -154,6 +154,18 @@ pipeline {
         '''
       }
     }
+
+stage('Debug Docker') {
+  steps {
+    sh '''
+      echo "🛠 Checking running containers:"
+      docker ps
+      echo "🧾 Showing docker-compose logs:"
+      docker compose logs
+    '''
+  }
+}
+
   }
 
   post {
