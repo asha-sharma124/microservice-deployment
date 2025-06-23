@@ -72,12 +72,7 @@
         //     }
         // }
 pipeline {
-   agent {
-    docker {
-      image 'maven:3.9.6-eclipse-temurin-17'
-      args '-v /root/.m2:/root/.m2'  // Optional cache
-    }
-  }
+   agent any
 
   environment {
     DOCKERHUB_USERNAME = credentials('docker-user')
@@ -94,6 +89,7 @@ pipeline {
     stage('Build All Services with Maven') {
       steps {
         echo "⚙️ Building all microservices..."
+        script{docker.image('maven:3.9.6-eclipse-temurin-17').inside {
         sh '''
           for svc in config-server discovery-service card-service card-statement-composite edge-server monitor-dashboard statement-service turbine; do
             echo "🚧 Building $svc"
@@ -101,7 +97,7 @@ pipeline {
             mvn clean package -DskipTests
             cd ..
           done
-        '''
+        '''}}
       }
     }
 
