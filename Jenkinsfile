@@ -160,8 +160,7 @@ stage('Debug Docker') {
     sh '''
       echo "🛠 Checking running containers:"
       docker ps
-      echo "🧾 Showing docker-compose logs:"
-      docker compose logs
+     
     '''
   }
 }
