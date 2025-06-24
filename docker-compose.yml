@@ -8,6 +8,8 @@ services:
      - "9090:9090"
     expose:
      - "9090"
+    networks:
+     - back-tier
 
   discovery-service:
     build: discovery-service
@@ -25,6 +27,8 @@ services:
 
     links:
      - config-server
+    networks:
+     - back-tier
 
   edge-server:
     build: edge-server
@@ -40,7 +44,9 @@ services:
     links:
      - config-server
      - discovery-service
-      
+    networks:
+     - back-tier
+
   card:
     build: card-service
     environment:
@@ -53,6 +59,8 @@ services:
     links:
      - config-server
      - discovery-service
+    networks:
+     - back-tier
 
   statement:
     build: statement-service
@@ -66,6 +74,8 @@ services:
     links:
      - config-server
      - discovery-service
+    networks:
+     - back-tier
 
   card-statement:
     build: card-statement-composite
@@ -83,6 +93,8 @@ services:
      - discovery-service
      - card
      - statement
+    networks:
+     - back-tier
 
   rabbitmq:
     build: rabbit-mq-server
@@ -92,6 +104,8 @@ services:
     expose:
      - "5672"
      - "15672"
+    networks:
+     - back-tier
 
   monitor:
     build: monitor-dashboard
@@ -108,6 +122,8 @@ services:
      - config-server
      - discovery-service
      - rabbitmq
+    networks:
+     - back-tier
 
   turbine:
     build: turbine
@@ -124,6 +140,9 @@ services:
      - config-server
      - discovery-service
      - rabbitmq
+    networks:
+     - back-tier
+
 networks:
     front-tier:
       driver: bridge
