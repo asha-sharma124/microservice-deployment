@@ -12,7 +12,7 @@ services:
   discovery-service:
     build: discovery-service
     environment:
-     - SPRING_PROFILES_ACTIVE=docker
+     
      - environment=docker
     container_name: discovery-service
     ports:
@@ -43,6 +43,7 @@ services:
   card:
     build: card-service
     environment:
+     - SPRING_PROFILES_ACTIVE=docker
      - environment=docker
     expose:
      - "8080"
