@@ -8,6 +8,6 @@ spring:
     config:
       server:
         git:
-           uri: https://github.com/fernandoabcampos/microservices-config.git
+           uri:https://github.com/asha-sharma124/microservice-config.git
            searchPaths: MASTER
 
