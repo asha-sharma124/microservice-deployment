@@ -56,6 +56,7 @@ services:
   statement:
     build: statement-service
     environment:
+     - SPRING_PROFILES_ACTIVE=docker
      - environment=docker
     expose:
      - "8080"
@@ -68,6 +69,7 @@ services:
   card-statement:
     build: card-statement-composite
     environment:
+     - SPRING_PROFILES_ACTIVE=docker
      - environment=docker
     expose:
      - "8080"
