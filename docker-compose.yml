@@ -13,6 +13,7 @@ services:
     build: discovery-service
     environment:
      - environment=docker
+    container_name: discovery-service
     ports:
      - "8761:8761"
     expose:
