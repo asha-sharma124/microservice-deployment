@@ -33,16 +33,16 @@ public class CardServiceController {
 		
 	}
 	
-	@RequestMapping(value="/cards", method = RequestMethod.GET)
-	public ResponseEntity<List<Card>> getCards() {
-		try{
-		return fakeRepo;
-		}
-		catch{
-			return ResponseEntity.status(HttpStatus.FORBIDDEN).body("ERROR IN FACK REPO");
-		}
-
+	@RequestMapping(value = "/cards", method = RequestMethod.GET)
+	public ResponseEntity<?> getCards() {
+	    try {
+	        List<Card> fewCards = fakeRepo.stream().limit(3).toList(); // Java 16+ syntax
+	        return ResponseEntity.status(HttpStatus.ACCEPTED).body(fewCards);
+	    } catch (Exception e) {
+	        return ResponseEntity.status(HttpStatus.FORBIDDEN).body("ERROR IN FAKE REPO");
+	    }
 	}
+
 	
 	@RequestMapping(value="/card/{cardId}", method = RequestMethod.GET)
 	public Card getCard(@PathVariable Long cardId) {
