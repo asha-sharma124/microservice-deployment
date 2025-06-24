@@ -34,8 +34,14 @@ public class CardServiceController {
 	}
 	
 	@RequestMapping(value="/cards", method = RequestMethod.GET)
-	public List<Card> getCards() {
+	public ResponseEntity<List<Card>> getCards() {
+		try{
 		return fakeRepo;
+		}
+		catch{
+			return ResponseEntity.status(HttpStatus.FORBIDDEN).body("ERROR IN FACK REPO");
+		}
+
 	}
 	
 	@RequestMapping(value="/card/{cardId}", method = RequestMethod.GET)
