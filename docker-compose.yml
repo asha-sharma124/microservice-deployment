@@ -29,6 +29,7 @@ services:
   edge-server:
     build: edge-server
     environment:
+     - SPRING_PROFILES_ACTIVE=docker
      - environment=docker
     ports:
      - "8765:8765"
@@ -43,7 +44,7 @@ services:
   card:
     build: card-service
     environment:
-     - SPRING_PROFILES_ACTIVE=docker
+     
      - environment=docker
     expose:
      - "8080"
